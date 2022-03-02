@@ -35,3 +35,11 @@ const cars = [
   
   const cheapCars = cars.filter(car=> car.price < 5000)
   console.log(cheapCars)
+
+  //4a Extra exercise
+
+  function addCarToDB(car){
+      const sqlString = `INSERT INTO cars (id,year,make,model,price) VALUES (${car.id},${car.year},${car.make},${car.model},${car.price});`
+      return sqlString
+  }
+  const addedCar = cars.map(car => addCarToDB(car)).forEach(car => console.log(car))
