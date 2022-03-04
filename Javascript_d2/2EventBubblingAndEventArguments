@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .mydiv {width: 25px; height: 25px;background-color:green; margin:1px;}
+    </style>
+</head>
+<body>
+
+    <header id="paragraph"> </header>
+    <div id="outer">
+        <div id="d1" class="mydiv"></div>
+        <div id="d2" class="mydiv"></div>
+        <div id="d3" class="mydiv"></div>
+        <div id="d4" class="mydiv"></div>
+        <div id="d5" class="mydiv"></div>
+        <div id="d6" class="mydiv"></div>
+        <div id="d7" class="mydiv"></div>
+        <div id="d8" class="mydiv"></div>
+        <div id="d9" class="mydiv"></div>
+        <div id="d10" class="mydiv"></div>
+        
+    </div>
+
+    <script>
+            // getElementById("outer").onclick gør at når vi trykker inde i dens div sker følgende:
+            // (e)=> alert("Hi from" + e.target.id) e referere til et event, target den specifikke div man trykker på, også giver den alert besked denne divs id.
+            document.getElementById("outer").onclick = (e)=> alert("Hi from " + e.target.id) & writeParagraph(e)
+
+            
+            // skriver beskeden i en Header over divs
+            function writeParagraph(e){
+            document.getElementById("paragraph").innerHTML = "Hi from " + e.target.id
+        
+        }
+        
+    </script>
+</body>
