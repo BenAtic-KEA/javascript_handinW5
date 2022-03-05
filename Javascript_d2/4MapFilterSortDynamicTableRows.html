@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +8,12 @@
   <title>Document</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-</head> 
+</head>
+
 <body>
 
   <div class="row">
@@ -24,14 +26,17 @@
   <div class="row">
     <div class="col-4"></div>
     <div class="col-4">
-      <input id="input1" type="text" placeholder="Price"> 
+      <input id="input1" type="text" placeholder="Price">
       <button id="btn1" type="button" class="btn btn-primary">Price less than</button>
+      <button id="btn-reset" type="button" class="btn btn-primary">Reset table</button>
     </div>
     <div class="col-4"></div>
   </div>
 
   <script>
 
+    let activeTable = []
+    let asc = 0
     const cars = [
       { id: 1, year: 1997, make: 'Ford', model: 'E350', price: 3000 },
       { id: 2, year: 1999, make: 'Chevy', model: 'Venture', price: 4900 },
@@ -40,36 +45,85 @@
       { id: 5, year: 2005, make: 'Volvo', model: 'V70', price: 44799 }
     ];
 
-    function createTable(cars){
-
-      const thKeys = Object.keys(cars[0])
-      let thLine = "<tr>" + thKeys.map(thKey => `<th>${thKey}</th>`).join("") + "</tr>";
-      console.log(thLine)
-
-      let tdLine = cars.map(car => {
-        let resultString = "<tr>"
-        for (const key in car) {
-          resultString += `<td>${car[key]}</td>` 
-      } return resultString += "</tr>"}).join("")
-
-      console.log(tdLine);
-      return thLine + tdLine
+    function createTableHeader(array) {
+      const thKeys = Object.keys(array[0])
+      let thLine = "<tr>" + thKeys.map(thKey => `<th id="table1-${thKey}">${thKey}</th>`).join("") + "</tr>";
+      return thLine
     }
 
-    document.getElementById("table1").innerHTML = createTable(cars)
+    function createTableRows(array) {
+      let tdLine = array.map(car => {
+        let resultString = "<tr>"
+        for (const key in car) {
+          resultString += `<td>${car[key]}</td>`
+        } return resultString += "</tr>"
+      }).join("")
+      return tdLine
+    }
+
+    function initiateTable(array) {
+      activeTable = array
+      let table = createTableHeader(cars) + createTableRows(array)
+
+      return table
+    }
+
+
+    document.getElementById("table1").innerHTML = initiateTable(cars)
 
     // Filter by price:
 
-    function priceFilter(cars, input){
-      const filteredList = cars.filter(car => car < input)
+    function priceLessThanFilter(array, input) {
+
+      const filteredList = array.filter(car => car.price < input)
+      return filteredList
     }
-    document.getElementById("btn1").onclick = (e) =>  document.getElementById("input1").value
+
+    document.getElementById("btn1").onclick = () => {
+
+      document.getElementById("table1").innerHTML = initiateTable(priceLessThanFilter(cars, document.getElementById("input1").value))
+      attachClickHandlers()
+    }
+
+    document.getElementById("btn-reset").onclick = () => {
+      document.getElementById("table1").innerHTML = initiateTable(cars)
+      attachClickHandlers()
+    }
+
+    function attachClickHandlers() {
+      document.getElementById("table1-price").onclick = writeSortedTable
+    }
+
+    function writeSortedTable() {
+
+      let sortedTable = [];
+
+      console.log("hej")
+      //Asc
+
+      switch (asc) {
+        case 0:
+          sortedTable = activeTable.sort((a, b) => a.price > b.price ? 1 : a.price < b.price ? -1 : 0)
+          asc = 1
+          break;
+        case 1:
+          sortedTable = activeTable.sort((a, b) => a.price < b.price ? 1 : a.price > b.price ? -1 : 0)
+          asc = 0
+          break;
+      }
+
+      document.getElementById("table1").innerHTML = initiateTable(sortedTable)
+      attachClickHandlers()
+    }
+
+
+    attachClickHandlers()
+
+
 
 
   </script>
 
 </body>
+
 </html>
-
-
-
